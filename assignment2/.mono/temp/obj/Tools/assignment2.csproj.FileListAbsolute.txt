@@ -1,0 +1,6 @@
+/home/john/repositories/Math43dGraphics/assignment2/.mono/temp/bin/Tools/assignment2.dll
+/home/john/repositories/Math43dGraphics/assignment2/.mono/temp/bin/Tools/assignment2.pdb
+/home/john/repositories/Math43dGraphics/assignment2/.mono/temp/obj/Tools/assignment2.csprojAssemblyReference.cache
+/home/john/repositories/Math43dGraphics/assignment2/.mono/temp/obj/Tools/assignment2.csproj.CoreCompileInputs.cache
+/home/john/repositories/Math43dGraphics/assignment2/.mono/temp/obj/Tools/assignment2.dll
+/home/john/repositories/Math43dGraphics/assignment2/.mono/temp/obj/Tools/assignment2.pdb
