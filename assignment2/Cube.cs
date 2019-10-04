@@ -6,6 +6,9 @@ public class Cube : MeshInstance
     // Declare member variables here. Examples:
  private float ticksPerRotation = 360 / 50.0f;
 
+
+    private bool shouldInvert = false;
+    private float test = 0.01f;
     private Vector3 currentPos = new Vector3(0.0f,0.0f,0.0f);
 
     private Vector3 currentRot = new Vector3(0.0f,0.0f,0.0f);
@@ -169,14 +172,27 @@ public class Cube : MeshInstance
         ((Spatial)this.GetParent()).SetTransform(t);
     }
 
+    public void _on_HSlider_value_changed() {
+        
+    }
+
+    public void _on_invertTransform_toggled(bool val) {
+       this.shouldInvert = val;
+    }
+
    // Called every frame. 'delta' is the elapsed time since the previous frame.
    public override void _Process(float delta)
    {
        this.SetTransform(Transform.Identity);
        ((Spatial)this.GetParent()).SetTransform(Transform.Identity);
-
-       
-        this.applyScale();
+        ShaderMaterial spm = (ShaderMaterial)(this.GetSurfaceMaterial(0));
+       test += 0.01f;
+       var identityTransform = Transform2D.Identity;
+       identityTransform.x.x = test;
+       Vector2 a  = new Vector2(test,0);
+       spm.SetShaderParam("myVec", a);
+       spm.SetShaderParam("shouldInvert", this.shouldInvert);
+       this.applyScale();
         this.applyRotation(delta);
         this.applyParentTransaltion(delta);
    }   
