@@ -1,13 +1,13 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Cube.cs" type="Script" id=1]
+[ext_resource path="res://rain2.png" type="Texture" id=1]
+[ext_resource path="res://Cube.cs" type="Script" id=2]
 
-[sub_resource type="CubeMesh" id=1]
+[sub_resource type="CubeMesh" id=5]
 
-[sub_resource type="Shader" id=2]
+[sub_resource type="Shader" id=6]
 code = "shader_type spatial;
-//ender_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
-render_mode unshaded;
+render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
 uniform vec4 albedo : hint_color;
 uniform sampler2D texture_albedo : hint_albedo;
 uniform float specular;
@@ -25,27 +25,46 @@ uniform vec3 uv2_offset;
 uniform vec2 myVec;
 uniform bool shouldInvert;
 
+
 void vertex() {
- mat4 multiplyer = PROJECTION_MATRIX * INV_CAMERA_MATRIX * WORLD_MATRIX; 
- POSITION = multiplyer * VERTEX;
-}	
+	mat4 multiplyer = PROJECTION_MATRIX * INV_CAMERA_MATRIX * WORLD_MATRIX; 
+	vec4 col = vec4(VERTEX, 1);
+	POSITION = multiplyer * col;
+}
+
+
+
 
 void fragment() {
+	
 	float invFactor = 1.0f;
 	if (shouldInvert) {
 		invFactor = -1.0f;
 	}	
 	vec2 base_uv = UV;
-	//base_uv.x = base_uv.x + myVec.x * invFactor;
-	//base_uv.y = base_uv.y + myVec.y * invFactor;
+	base_uv.x = base_uv.x + myVec.x * invFactor;
+	base_uv.y = base_uv.y + myVec.y * invFactor;
 	vec4 albedo_tex = texture(texture_albedo,base_uv);
 	ALBEDO = albedo.rgb * albedo_tex.rgb;
-	
 }
 "
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = SubResource( 2 )
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 6 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/specular = 0.5
+shader_param/metallic = 0.0
+shader_param/roughness = 0.0
+shader_param/point_size = 0.0
+shader_param/metallic_texture_channel = Plane( 1, 0, 0, 0 )
+shader_param/roughness_texture_channel = Plane( 1, 0, 0, 0 )
+shader_param/uv1_scale = Vector3( 1, 1, 1 )
+shader_param/uv1_offset = Vector3( 0, 0, 0 )
+shader_param/uv2_scale = Vector3( 1, 1, 1 )
+shader_param/uv2_offset = Vector3( 0, 0, 0 )
+shader_param/myVec = null
+shader_param/shouldInvert = null
+shader_param/texture_albedo = ExtResource( 1 )
 
 [sub_resource type="SpatialMaterial" id=4]
 albedo_color = Color( 0.137255, 0.0784314, 0.537255, 1 )
@@ -59,9 +78,10 @@ omni_range = 5.01945
 [node name="Spatial" type="Spatial" parent="."]
 
 [node name="Cube" type="MeshInstance" parent="Spatial"]
-mesh = SubResource( 1 )
-material/0 = SubResource( 3 )
-script = ExtResource( 1 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.208353, -0.0865197, -0.0599647 )
+mesh = SubResource( 5 )
+material/0 = SubResource( 7 )
+script = ExtResource( 2 )
 
 [node name="CSGSphere" type="CSGSphere" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.43804, 2.25584, -3.35019 )
@@ -108,4 +128,3 @@ margin_bottom = 77.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "0"
 [connection signal="toggled" from="invertTransform" to="Spatial/Cube" method="_on_invertTransform_toggled"]
-[connection signal="value_changed" from="HSlider" to="Spatial/Cube" method="_on_HSlider_value_changed"]
