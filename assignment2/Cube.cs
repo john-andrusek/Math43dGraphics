@@ -7,9 +7,22 @@ public class Cube : MeshInstance
  private float ticksPerRotation = 360 / 50.0f;
 
 
+	private double theta = 0.0;
+	private float scaleX = 1.0f;
+	private float scaleY = 1.0f;
+	private float tx = 0.01f;
+	private float ty = 0f;
+
+	private float scaleFactor = 1f;
+	private float translateSpeed = 0f;	
+
+	private float yTranslateSpeed = 0f;
+
     private bool shouldInvert = false;
-    private float test = 0.01f;
-    private Vector3 currentPos = new Vector3(0.0f,0.0f,0.0f);
+
+	private Basis shaderMatrix = Basis.Identity;
+	
+	private Vector3 currentPos = new Vector3(0.0f,0.0f,0.0f);
 
     private Vector3 currentRot = new Vector3(0.0f,0.0f,0.0f);
 
@@ -179,21 +192,55 @@ public class Cube : MeshInstance
     public void _on_invertTransform_toggled(bool val) {
        this.shouldInvert = val;
     }
-
-   // Called every frame. 'delta' is the elapsed time since the previous frame.
+	
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
    public override void _Process(float delta)
    {
        this.SetTransform(Transform.Identity);
        ((Spatial)this.GetParent()).SetTransform(Transform.Identity);
         ShaderMaterial spm = (ShaderMaterial)(this.GetSurfaceMaterial(0));
-       test += 0.01f;
-       var identityTransform = Transform2D.Identity;
-       identityTransform.x.x = test;
-       Vector2 a  = new Vector2(test,0);
-       spm.SetShaderParam("myVec", a);
+       this.tx += this.translateSpeed;
+	   this.ty += this.yTranslateSpeed;
+	   this.scaleX = this.scaleFactor;
+	   this.scaleY = this.scaleFactor;
+	   
+		//translation secton
+	   this.shaderMatrix.SetRow(0,new Vector3(scaleX * (float)Math.Cos(theta), -1 * scaleX * (float)Math.Sin(theta), 0.0f ));
+	   this.shaderMatrix.SetRow(1,new Vector3(scaleY * (float)Math.Sin(theta), scaleY * (float)Math.Cos(theta), 0.0f ));
+	   this.shaderMatrix.SetRow(2, new Vector3(tx, ty, 1.0f ));
+	   spm.SetShaderParam("shaderMatrix", this.shaderMatrix);
        spm.SetShaderParam("shouldInvert", this.shouldInvert);
        this.applyScale();
         this.applyRotation(delta);
         this.applyParentTransaltion(delta);
-   }   
+   }
+   
+	public void _on_translateSpeed_value_changed(float value)
+	{
+		this.translateSpeed = (value - 5) * 0.01f; 
+	}
+
+	public void _on_yTransateSpeed_value_changed(float value)
+	{
+		this.yTranslateSpeed = (value - 5) * 0.01f; 
+	}
+
+
+	public void _on_scaleFactor_value_changed(float value)
+	{
+		float adustedVal = (value - 4);
+		if (adustedVal > 0) {
+			this.scaleFactor = adustedVal;
+		} else {
+				GD.Print(adustedVal, (4f + adustedVal) , (5f + adustedVal) / 5f);
+				this.scaleFactor = (4f + adustedVal) / 5f;
+		}
+	}
 }
+
+
+
+
+
+
+
