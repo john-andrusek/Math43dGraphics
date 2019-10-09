@@ -35,7 +35,7 @@ public class Cube : MeshInstance
 
     private float zScale = 1.0f;
 
-    private string updateParam = "11";
+    private string updateParam = "0";
 
     private Vector2 fpsTranslation;
    
@@ -48,6 +48,36 @@ public class Cube : MeshInstance
 
     public void updateDisplayParams(string id) {
        this.updateParam = id;
+		this.resetParameters();
+		GD.Print(id);
+		switch(id) {
+			case "0":
+				break;
+			case "1":
+				this.translateSpeed = 0.01f;
+				break;
+			case "2":
+				this.translateSpeed = -0.01f;
+				break;	
+			case "3":
+				this.yTranslateSpeed = -0.01f;
+				break;
+			case "4":
+				this.yTranslateSpeed = 0.01f;
+				break;		
+			case "5":
+				this.scaleFactor = 2.0f;
+				break;		
+			case "6":
+				this.scaleFactor = 0.5f;
+				break;			
+			case "7":
+				this.theta = 5;
+				break;		
+			case "8":
+				this.theta = -5;
+				break;			
+		}
     }
 
   
@@ -199,12 +229,34 @@ public class Cube : MeshInstance
        this.SetTransform(Transform.Identity);
        ((Spatial)this.GetParent()).SetTransform(Transform.Identity);
         ShaderMaterial spm = (ShaderMaterial)(this.GetSurfaceMaterial(0));
-       this.tx += this.translateSpeed;
-	   this.ty += this.yTranslateSpeed;
-	   this.scaleX = this.scaleFactor;
-	   this.scaleY = this.scaleFactor;
+		if (this.translateSpeed == 0) {
+			this.tx = 0;
+		}
+		if (this.yTranslateSpeed == 0) {
+			this.ty = 0;
+		}
+		GD.Print(this.scaleFactor);
+		if (this.scaleFactor == 1) {
+			this.scaleX = this.scaleFactor;
+	   		this.scaleY = this.scaleFactor;
+		} else {
+			/*if (scaleFactor > 1) {
+				this.scaleX += this.scaleFactor - 1;
+	   			this.scaleY += this.scaleFactor - 1;
+			} else {
+				this.scaleX -= this.scaleFactor;
+	   			this.scaleY -= this.scaleFactor;
+			} */
+			this.scaleX = this.scaleFactor;
+			this.scaleY = this.scaleFactor;
+			
+		}
 	   
-		//translation secton
+
+	   this.tx += this.translateSpeed;
+	   this.ty += this.yTranslateSpeed;
+	   
+	  	//translation secton
 	   this.shaderMatrix.SetRow(0,new Vector3(scaleX * (float)Math.Cos(theta), -1 * scaleX * (float)Math.Sin(theta), 0.0f ));
 	   this.shaderMatrix.SetRow(1,new Vector3(scaleY * (float)Math.Sin(theta), scaleY * (float)Math.Cos(theta), 0.0f ));
 	   this.shaderMatrix.SetRow(2, new Vector3(tx, ty, 1.0f ));
@@ -223,6 +275,13 @@ public class Cube : MeshInstance
 	public void _on_yTransateSpeed_value_changed(float value)
 	{
 		this.yTranslateSpeed = (value - 5) * 0.01f; 
+	}
+
+	public void resetParameters() {
+		this.theta = 0.0;
+		this.scaleFactor = 1.0f;
+	 	this.translateSpeed = 0f;
+		this.yTranslateSpeed = 0f;
 	}
 
 
