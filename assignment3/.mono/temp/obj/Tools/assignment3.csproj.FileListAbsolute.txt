@@ -1,0 +1,5 @@
+/Users/john.andrusek@ca.ibm.com/mathForGameProgramming/Math43dGraphics/assignment3/.mono/temp/bin/Tools/assignment3.dll
+/Users/john.andrusek@ca.ibm.com/mathForGameProgramming/Math43dGraphics/assignment3/.mono/temp/bin/Tools/assignment3.pdb
+/Users/john.andrusek@ca.ibm.com/mathForGameProgramming/Math43dGraphics/assignment3/.mono/temp/obj/Tools/assignment3.csprojAssemblyReference.cache
+/Users/john.andrusek@ca.ibm.com/mathForGameProgramming/Math43dGraphics/assignment3/.mono/temp/obj/Tools/assignment3.dll
+/Users/john.andrusek@ca.ibm.com/mathForGameProgramming/Math43dGraphics/assignment3/.mono/temp/obj/Tools/assignment3.pdb

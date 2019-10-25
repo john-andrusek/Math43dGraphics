@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://theCylinder.cs" type="Script" id=1]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_color = Color( 0.0862745, 0.0980392, 0.92549, 1 )
+
+[node name="CylinderVis" type="Spatial"]
+
+[node name="theCylinder" type="CSGCylinder" parent="."]
+radius = 0.354
+height = 0.771
+material = SubResource( 1 )
+script = ExtResource( 1 )
+
+[node name="VisibilityNotifier" type="VisibilityNotifier" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.350888, -0.215565, -0.0575006 )
+aabb = AABB( -0.0302677, -0.0953184, -0.00106412, 0.560535, 0.835168, 0.519706 )
+[connection signal="camera_entered" from="VisibilityNotifier" to="theCylinder" method="_on_VisibilityNotifier_camera_entered"]
+[connection signal="camera_exited" from="VisibilityNotifier" to="theCylinder" method="_on_VisibilityNotifier_camera_exited"]
