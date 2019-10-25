@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assignment3.cs" type="Script" id=1]
+[ext_resource path="res://MainCamera.cs" type="Script" id=2]
+[ext_resource path="res://FrucstumPainter.cs" type="Script" id=3]
+[ext_resource path="res://CameraSelector.cs" type="Script" id=4]
+
+[node name="world" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="origin" type="ARVROrigin" parent="."]
+
+[node name="rightCamera" type="ARVRCamera" parent="origin"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5, 0, 0 )
+fov = 79.3
+
+[node name="MainCamera" type="ARVRCamera" parent="origin"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5 )
+current = true
+fov = 28.8
+near = 0.11
+far = 5.0
+script = ExtResource( 2 )
+
+[node name="backCamera" type="ARVRCamera" parent="origin"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -0.11 )
+fov = 179.0
+
+[node name="leftCamera" type="ARVRCamera" parent="origin"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5, 0, 0 )
+fov = 79.9
+
+[node name="topCamera" type="ARVRCamera" parent="origin"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5, 0 )
+fov = 179.0
+
+[node name="FrucstumPainter" type="ImmediateGeometry" parent="."]
+script = ExtResource( 3 )
+
+[node name="CameraSelector" type="MenuButton" parent="."]
+margin_left = 17.0
+margin_top = 10.0
+margin_right = 127.0
+margin_bottom = 38.0
+rect_scale = Vector2( 2, 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Update Camera"
+script = ExtResource( 4 )
