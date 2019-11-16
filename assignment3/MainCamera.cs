@@ -27,8 +27,7 @@ public class MainCamera : ARVRCamera
 		 this.far2 = farPlane.Intersect3(leftPlane,topPlane);
 		 this.far3 = farPlane.Intersect3(rightPlane,topPlane);
 		 this.far4 = farPlane.Intersect3(rightPlane,bottomPlane);
-
-  }	
+	}	
 
 	private void _on_VisibilityNotifier_camera_entered(object camera)
 	{
@@ -37,7 +36,7 @@ public class MainCamera : ARVRCamera
 
   public override void _Process(float delta)
   {
-	    this.calcPoints();
+	  	this.calcPoints();
   }
 }
 

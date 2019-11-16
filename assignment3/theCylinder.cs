@@ -13,22 +13,20 @@ public class theCylinder : CSGCylinder
 
 	private void _on_VisibilityNotifier_camera_entered(object camera)
 	{
-		GD.Print(aWorld.currentCameraId);
-		ARVRCamera aCam = (ARVRCamera)camera;
-		if ((camera.GetType().ToString() == "MainCamera") && (aWorld.currentCameraId == "0")) {
-			this.isVisible = true;
-		}	
+		//ARVRCamera aCam = (ARVRCamera)camera;
+		//if ((camera.GetType().ToString() == "MainCamera") && (aWorld.currentCameraId == "0")) {
+	//		this.isVisible = true;
+	//	}	
 			
 	}
 
 
 	private void _on_VisibilityNotifier_camera_exited(object camera)
 	{
-		ARVRCamera aCam = (ARVRCamera)camera;
-		if ((camera.GetType().ToString() == "MainCamera") && (aWorld.currentCameraId == "0")) {
-			GD.Print("invisible");
-			this.isVisible = false;
-		}
+		//ARVRCamera aCam = (ARVRCamera)camera;
+		//if ((camera.GetType().ToString() == "MainCamera") && (aWorld.currentCameraId == "0")) {
+	//		this.isVisible = false;
+	//	}
 	}
 
 
@@ -45,7 +43,7 @@ public class theCylinder : CSGCylinder
   // Called every frame. 'delta' is the elapsed time since the previous frame.
   public override void _Process(float delta)
   {
- 		if (this.isVisible) {
+	  	if (this.isVisible) {
 			 SpatialMaterial aMat = new SpatialMaterial();
 			 aMat.SetAlbedo(new Color(0.92549f, 0.164706f, 0.086275f));
 			 this.SetMaterial(aMat);

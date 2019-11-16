@@ -6,6 +6,13 @@ public class assignment3 : Spatial
     // Declare member variables here. Examples:
     // private int a = 2;
 	ARVRCamera[] cameras = new  ARVRCamera[5];
+
+	AABB[] boxes = new AABB[5];
+
+	public Vector3[] positions = new Vector3[5];
+
+	theCylinder[] cylinders = new theCylinder[5];
+
     private float ticksPerFrame = 550.0f;
 	public string currentCameraId = "0";
     
@@ -37,9 +44,14 @@ public class assignment3 : Spatial
 			
 			node.SetTranslation(newPos);
 			theCylinder aNode = (theCylinder)node.GetNode("./theCylinder");
+			VisibilityNotifier aBX = (VisibilityNotifier) node.GetNode("./theCylinder/VisibilityNotifier");
+			aBX.SetTranslation(newPos);
+			
+			boxes[i] = aBX.GetAabb();
 			aNode.setWorld(this);
 			AddChild(node);
-
+			this.cylinders[i] = aNode;
+			positions[i] = newPos;
 		}
 	}	
 
@@ -75,21 +87,75 @@ private Vector3 applyTransaltion(float deltaT) {
         } else if (Input.IsKeyPressed((int)Godot.KeyList.Down)) {
             delta.y = -this.fpsTranslation.y;
         } 
-        ARVRCamera aCam = (ARVRCamera)(this.cameras[int.Parse(this.currentCameraId)]);
-		Vector3 pos = aCam.GetTranslation();
-        Transform t = this.cameras[int.Parse(this.currentCameraId)].GetTransform();  
-		
-		if (delta != Vector3.Zero) {
-			t.Translated((delta * deltaT));
-			aCam.SetTransform(t);
-        }
+
+		for(int i=0; i < 1;i++) {
+			ARVRCamera aCam = (ARVRCamera)(this.cameras[i]);
+			Vector3 pos = aCam.GetTranslation();
+			Transform t = this.cameras[i].GetTransform();  
+			
+			
+			if (delta != Vector3.Zero) {
+				t.Translated((delta * deltaT));
+				aCam.SetTransform(t);
+			}	
+		}
 		return delta;
    }
+	int[] computeALLMostPositivePoints(AABB abox) {
+		Godot.Collections.Array planes = (Godot.Collections.Array)(this.cameras[0].GetFrustum());
+		int[] indexOfMostPositivePoint = new int[6];
+		for (int index = 0; index < 6; index++) {		
+			 indexOfMostPositivePoint [index] =
+		     computeIndexOfMostPositivePoint (abox, (Plane)planes[index]);	
+		}
+		return indexOfMostPositivePoint;
+	}
+
+	public bool isPointInside(int boxIndex, int pointInd,Godot.Collections.Array planes) {
+			AABB box = this.boxes[boxIndex];
+	 		for (int planeIndex=0;planeIndex < 6;planeIndex++){
+				 Plane plane = (Plane)planes [planeIndex];
+				 Vector3 aPoint = box.GetEndpoint(pointInd) + positions[boxIndex];
+				if (plane.DistanceTo(aPoint) >= 0) {
+					return false;
+				}
+			}
+			return true;
+	}
+	bool isInside (int boxIndex, int[] indexOfMostPositivePoint) {
+	 	AABB box = this.boxes[boxIndex];
+	 	Godot.Collections.Array planes = (Godot.Collections.Array)(this.cameras[0].GetFrustum());
+		
+		for (int pointInd=0;pointInd < 8;pointInd++) {
+			if (this.isPointInside(boxIndex, pointInd, planes)) {
+				return true;
+			}
+		}	
+		return false;
+	}
+
+	
+	int computeIndexOfMostPositivePoint (AABB anyBox, Plane plane) {
+			float distance = plane.DistanceTo(anyBox.GetEndpoint(0));
+			int indexOfMostPositive = 0; //So far…
+			for (int index = 1; index < 8; index++) {		
+				float d = plane.DistanceTo (anyBox.GetEndpoint (index));
+				if (d > distance) {
+					distance = d; indexOfMostPositive = index;
+				}
+			}
+		return indexOfMostPositive ; 
+	}
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
   public override void _Process(float delta)
   {
 	 this.applyTransaltion(delta);
+	 int[] points = this.computeALLMostPositivePoints(this.boxes[0]);
+	 for (int i=0;i<5;i++) {
+		 cylinders[i].isVisible = this.isInside(i, points);
+	 }
+
   }
 }
 
