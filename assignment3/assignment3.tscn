@@ -38,11 +38,36 @@ fov = 179.0
 script = ExtResource( 3 )
 
 [node name="CameraSelector" type="MenuButton" parent="."]
-margin_left = 17.0
+margin_left = 18.0
 margin_top = 10.0
-margin_right = 127.0
+margin_right = 128.0
 margin_bottom = 38.0
 rect_scale = Vector2( 2, 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Update Camera"
+text = "Update view"
 script = ExtResource( 4 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = 12.0
+margin_top = 289.0
+margin_right = 420.0
+margin_bottom = 592.0
+rect_scale = Vector2( 1.5, 1.5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "The Main camera is the camera the frucstrum is drawn. 
+Items in red are visible in the frucstrum.  Items in blue are not visible
+See the frucstrum from different angles by selecting a different view from the Update view drop down.
+
+arrow left:  moves main camera left
+arrow right:  moves main camera right
+arrow up:  moves main camera up
+arrow down:  moves main camera down
+shift arrow up: moves camera forward
+shift arrow down: moves camera backward
+
+
+
+
+
+"
+autowrap = true
